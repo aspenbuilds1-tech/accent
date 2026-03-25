@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Ascent Trade Mission 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-pale: #f0dfa0;
+      --black: #080808;
+      --deep: #0e0e0e;
+      --surface: #141414;
+      --surface2: #1c1c1c;
+      --text: #e8e0d0;
+      --muted: #7a7060;
+      --white: #faf8f2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+      transition: background 0.3s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,0.97);
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+    .nav-logo span { color: var(--white); font-weight: 300; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; color: var(--gold-light); }
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 0.5rem 1.4rem;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0 4rem;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 70% 50%, rgba(201,168,76,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 50% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%),
+        linear-gradient(135deg, #080808 0%, #0e0e0e 50%, #0a0905 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 780px; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
+    .hero-eyebrow-text {
+      font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--gold); font-weight: 500;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      font-weight: 300; line-height: 0.95; margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--gold-light); }
+    .hero-title .block { display: block; }
+    .hero-subtitle {
+      font-size: 0.9rem; line-height: 1.8; color: var(--muted);
+      max-width: 520px; margin-bottom: 3rem;
+      opacity: 0; animation: fadeUp 0.9s 0.6s forwards; letter-spacing: 0.02em;
+    }
+    .hero-actions {
+      display: flex; gap: 1.2rem; align-items: center;
+      opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .btn-primary {
+      background: var(--gold); color: var(--black);
+      padding: 1rem 2.4rem; font-family: 'Montserrat', sans-serif;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; border: none; cursor: pointer;
+      text-decoration: none; display: inline-block; transition: all 0.25s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-secondary {
+      color: var(--text); font-size: 0.72rem; letter-spacing: 0.15em;
+      text-transform: uppercase; text-decoration: none; opacity: 0.6;
+      transition: opacity 0.2s; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .btn-secondary:hover { opacity: 1; }
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 4rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      opacity: 0; animation: fadeIn 1s 1.2s forwards;
+    }
+    .hero-scroll span {
+      font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--muted); writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s infinite;
+    }
+    .hero-year {
+      position: absolute; right: 4rem; bottom: 2.5rem;
+      font-family: 'Cormorant Garamond', serif; font-size: 8rem; font-weight: 300;
+      color: rgba(201,168,76,0.06); letter-spacing: -0.02em; line-height: 1; user-select: none;
+    }
+
+    /* SECTIONS */
+    section { padding: 7rem 4rem; }
+    .section-tag { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; }
+    .section-tag-line { width: 30px; height: 1px; background: var(--gold); }
+    .section-tag-text { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.8rem); font-weight: 300; line-height: 1.1; margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold-light); }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* VALUE */
+    #value { background: var(--surface); border-top: 1px solid rgba(201,168,76,0.08); border-bottom: 1px solid rgba(201,168,76,0.08); }
+    .value-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .value-lead { font-size: 1.05rem; line-height: 1.9; color: rgba(232,224,208,0.7); max-width: 460px; }
+    .value-lead strong { color: var(--gold-light); font-weight: 500; }
+    .value-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(201,168,76,0.1); }
+    .value-card { background: var(--deep); padding: 2rem 1.8rem; transition: background 0.25s; }
+    .value-card:hover { background: #161410; }
+    .value-card-icon { width: 36px; height: 36px; margin-bottom: 1.2rem; color: var(--gold); }
+    .value-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; margin-bottom: 0.6rem; color: var(--white); }
+    .value-card p { font-size: 0.78rem; line-height: 1.75; color: var(--muted); }
+
+    /* DESTINATIONS */
+    #destinations { background: var(--black); }
+    .dest-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
+    .dest-header p { font-size: 0.85rem; color: var(--muted); max-width: 320px; line-height: 1.7; text-align: right; }
+    .dest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(201,168,76,0.08); }
+    .dest-card {
+      background: var(--deep); padding: 3rem 2.5rem; position: relative;
+      overflow: hidden; transition: transform 0.3s;
+    }
+    .dest-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0); transition: transform 0.4s;
+    }
+    .dest-card:hover::before { transform: scaleX(1); }
+    .dest-card:hover { transform: translateY(-4px); }
+    .dest-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300;
+      color: rgba(201,168,76,0.08); position: absolute; top: 1.5rem; right: 2rem; line-height: 1;
+    }
+    .dest-flag { font-size: 2.4rem; margin-bottom: 1.5rem; }
+    .dest-country { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .dest-city { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 400; color: var(--white); margin-bottom: 0.4rem; }
+    .dest-event { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.8rem; padding-bottom: 1.8rem; border-bottom: 1px solid rgba(201,168,76,0.1); }
+    .dest-focus { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 300; color: var(--text); margin-bottom: 0.8rem; }
+    .dest-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .dest-tag { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(201,168,76,0.25); padding: 0.25rem 0.7rem; }
+
+    /* PROCESS */
+    #process { background: var(--surface); border-top: 1px solid rgba(201,168,76,0.08); }
+    .process-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 6rem; align-items: start; }
+    .process-steps { display: flex; flex-direction: column; }
+    .process-step { display: flex; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid rgba(201,168,76,0.07); }
+    .process-step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300;
+      color: rgba(201,168,76,0.15); line-height: 1; min-width: 50px; transition: color 0.3s;
+    }
+    .process-step:hover .step-num { color: var(--gold); }
+    .step-content h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+    .step-content p { font-size: 0.8rem; line-height: 1.75; color: var(--muted); }
+    .process-aside { background: var(--deep); border: 1px solid rgba(201,168,76,0.12); padding: 3rem; position: sticky; top: 6rem; }
+    .process-aside-quote { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; font-style: italic; line-height: 1.4; color: var(--gold-pale); margin-bottom: 2rem; }
+    .process-aside-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .include-list { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .include-item { display: flex; align-items: center; gap: 0.8rem; font-size: 0.78rem; color: rgba(232,224,208,0.7); }
+    .include-item::before { content: ''; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+    /* VISION */
+    #vision { background: var(--black); text-align: center; position: relative; overflow: hidden; }
+    .vision-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.05) 0%, transparent 70%); }
+    .vision-content { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; }
+    .vision-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.1; margin-bottom: 1.5rem; }
+    .vision-title em { font-style: italic; color: var(--gold-light); }
+    .vision-text { font-size: 0.9rem; line-height: 1.9; color: var(--muted); margin-bottom: 3rem; }
+    .vision-cta-group { display: flex; justify-content: center; gap: 1.5rem; align-items: center; }
+    .btn-outline { border: 1px solid rgba(201,168,76,0.4); color: var(--text); padding: 1rem 2.4rem; font-family: 'Montserrat', sans-serif; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; transition: all 0.25s; display: inline-block; }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* CONTACT */
+    #contact { background: var(--surface); border-top: 1px solid rgba(201,168,76,0.08); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-field label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+    .form-field input, .form-field select, .form-field textarea {
+      background: var(--deep); border: 1px solid rgba(201,168,76,0.12);
+      color: var(--text); padding: 0.85rem 1rem; font-family: 'Montserrat', sans-serif;
+      font-size: 0.82rem; outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--gold); }
+    .form-field textarea { resize: vertical; min-height: 120px; }
+    .form-field select option { background: var(--deep); }
+    .contact-info-text { font-size: 0.9rem; line-height: 1.9; color: rgba(232,224,208,0.6); }
+    .contact-info-text strong { color: var(--gold-light); font-weight: 500; }
+    .contact-detail { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-detail-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .contact-detail-icon { color: var(--gold); font-size: 1rem; margin-top: 0.1rem; }
+    .contact-detail-label { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.2rem; }
+    .contact-detail-value { font-size: 0.85rem; color: var(--text); }
+
+    /* FOOTER */
+    footer {
+      background: var(--deep); border-top: 1px solid rgba(201,168,76,0.08);
+      padding: 2.5rem 4rem; display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
+    .footer-logo span { color: var(--muted); font-weight: 300; }
+    .footer-copy { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scrollPulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      #hero { padding: 0 1.5rem; }
+      .hero-title { font-size: clamp(2.8rem, 10vw, 4rem); }
+      .hero-scroll { left: 1.5rem; }
+      .hero-year { display: none; }
+      .value-grid, .dest-grid, .process-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+      .dest-header { flex-direction: column; gap: 1rem; }
+      .dest-header p { text-align: left; }
+      .process-aside { position: static; }
+      .vision-cta-group { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <div class="nav-logo">The Ascent <span>Trade Mission</span></div>
+    <ul class="nav-links">
+      <li><a href="#value">About</a></li>
+      <li><a href="#destinations">Destinations</a></li>
+      <li><a href="#process">How It Works</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Apply for a Slot</a>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="hero-eyebrow-text">Ghana's Premier Trade Delegation · 2026</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="block">Beyond</span>
+        <em class="block">Local Limits.</em>
+      </h1>
+      <p class="hero-subtitle">
+        We move Ghanaian entrepreneurs directly into the heart of global trade — connecting you with manufacturers, market innovators, and commercial hubs across China, Turkey, and Dubai.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Secure Your Slot</a>
+        <a href="#destinations" class="btn-secondary">
+          Explore Destinations
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="none"><path d="M1 5h14M10 1l5 4-5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+    <div class="hero-year">2026</div>
+  </section>
+
+  <section id="value">
+    <div class="value-grid reveal">
+      <div>
+        <div class="section-tag"><div class="section-tag-line"></div><span class="section-tag-text">The Value Proposition</span></div>
+        <h2 class="section-title">We don't organize<br><em>trips. We facilitate</em><br>market entry.</h2>
+        <p class="value-lead">Middleman costs and supply chain uncertainty eat into margins. The Ascent is your <strong>strategic bridge</strong> — connecting you directly to vetted factory owners, trade officials, and innovators at the source.</p>
+      </div>
+      <div class="value-cards">
+        <div class="value-card">
+          <svg class="value-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <h3>Direct Sourcing</h3>
+          <p>Eliminate third-party markups by meeting factory owners and suppliers face to face at the source.</p>
+        </div>
+        <div class="value-card">
+          <svg class="value-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          <h3>Logistics Mastery</h3>
+          <p>Expert guidance on container groupage, shipping to Ghana, and 2026 customs regulations.</p>
+        </div>
+        <div class="value-card">
+          <svg class="value-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <h3>Premium Experience</h3>
+          <p>All-inclusive Emirates flights, luxury accommodations, and private B2B matchmaking sessions.</p>
+        </div>
+        <div class="value-card">
+          <svg class="value-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <h3>De-Risking Trade</h3>
+          <p>We handle complex visa invitations, local transportation, and bilingual translation on the ground.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="destinations">
+    <div class="dest-header reveal">
+      <div>
+        <div class="section-tag"><div class="section-tag-line"></div><span class="section-tag-text">Strategic Destinations 2026</span></div>
+        <h2 class="section-title">Three Hubs.<br><em>One Mission.</em></h2>
+      </div>
+      <p>Each destination is chosen for its commercial significance to Ghanaian industries — from volume manufacturing to luxury design and cutting-edge innovation.</p>
+    </div>
+    <div class="dest-grid reveal">
+      <div class="dest-card">
+        <div class="dest-num">01</div>
+        <div class="dest-flag">🇨🇳</div>
+        <div class="dest-country">China</div>
+        <div class="dest-city">Guangzhou</div>
+        <div class="dest-event">Canton Fair · Volume Manufacturing</div>
+        <div class="dest-focus">The world's largest trade fair — unmatched access to factories, pricing, and supply chains at scale.</div>
+        <div class="dest-tags">
+          <span class="dest-tag">Electronics</span>
+          <span class="dest-tag">Solar</span>
+          <span class="dest-tag">Machinery</span>
+          <span class="dest-tag">Volume</span>
+        </div>
+      </div>
+      <div class="dest-card">
+        <div class="dest-num">02</div>
+        <div class="dest-flag">🇹🇷</div>
+        <div class="dest-country">Turkey</div>
+        <div class="dest-city">Istanbul</div>
+        <div class="dest-event">Design & Manufacturing Hub</div>
+        <div class="dest-focus">Where European design meets competitive manufacturing — ideal for premium finishes and lifestyle products.</div>
+        <div class="dest-tags">
+          <span class="dest-tag">Furniture</span>
+          <span class="dest-tag">Textiles</span>
+          <span class="dest-tag">Auto Parts</span>
+        </div>
+      </div>
+      <div class="dest-card">
+        <div class="dest-num">03</div>
+        <div class="dest-flag">🇦🇪</div>
+        <div class="dest-country">UAE</div>
+        <div class="dest-city">Dubai</div>
+        <div class="dest-event">Innovation & Construction Gateway</div>
+        <div class="dest-focus">The global crossroads for construction, tech, and food scaling — where ambition meets infrastructure.</div>
+        <div class="dest-tags">
+          <span class="dest-tag">Luxury Finishes</span>
+          <span class="dest-tag">Tech</span>
+          <span class="dest-tag">F&B Scaling</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="process-grid">
+      <div>
+        <div class="section-tag reveal"><div class="section-tag-line"></div><span class="section-tag-text">The Process</span></div>
+        <h2 class="section-title reveal">How the<br><em>Mission Works</em></h2>
+        <div class="process-steps">
+          <div class="process-step reveal">
+            <div class="step-num">01</div>
+            <div class="step-content"><h3>Selection</h3><p>Apply for a slot in a specific industry-themed phase. We curate each cohort for maximum synergy and personalized support.</p></div>
+          </div>
+          <div class="process-step reveal">
+            <div class="step-num">02</div>
+            <div class="step-content"><h3>Onboarding</h3><p>We handle Emirates flight bookings, Business (M) Visa invitations, and comprehensive pre-mission briefings.</p></div>
+          </div>
+          <div class="process-step reveal">
+            <div class="step-num">03</div>
+            <div class="step-content"><h3>Execution</h3><p>On-ground private shuttles, guided fair tours, and one-on-one B2B matchmaking sessions at your destination.</p></div>
+          </div>
+          <div class="process-step reveal">
+            <div class="step-num">04</div>
+            <div class="step-content"><h3>Integration</h3><p>Post-trip support to finalize contracts and manage your initial shipment back to Ghana from source.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="process-aside reveal">
+        <div class="process-aside-quote">"This is more than a trip — it is a strategic business elevation for those ready to expand beyond local limits."</div>
+        <div class="process-aside-label">Everything Included</div>
+        <div class="include-list">
+          <div class="include-item">Emirates return flights (all-inclusive)</div>
+          <div class="include-item">Business Visa invitation handling</div>
+          <div class="include-item">Luxury hotel accommodations</div>
+          <div class="include-item">Private shuttle transportation</div>
+          <div class="include-item">Guided trade fair tours</div>
+          <div class="include-item">Exclusive B2B matchmaking sessions</div>
+          <div class="include-item">Bilingual translation support</div>
+          <div class="include-item">Logistics & customs advisory</div>
+          <div class="include-item">Post-trip shipment integration</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vision">
+    <div class="vision-bg"></div>
+    <div class="vision-content reveal">
+      <div class="section-tag" style="justify-content:center; margin-bottom:1.5rem;">
+        <div class="section-tag-line"></div>
+        <span class="section-tag-text">The Vision</span>
+        <div class="section-tag-line"></div>
+      </div>
+      <h2 class="vision-title">Become a<br><em>Global-Local</em><br>Entrepreneur.</h2>
+      <p class="vision-text">We are building a new generation of Ghanaian entrepreneurs who carry local market knowledge but wield global supply chain power — equipped to dominate their industries from the source.</p>
+      <div class="vision-cta-group">
+        <a href="#contact" class="btn-primary">Apply for a Slot — 2026</a>
+        <a href="#destinations" class="btn-outline">View Destinations</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="contact-grid">
+      <div>
+        <div class="section-tag reveal"><div class="section-tag-line"></div><span class="section-tag-text">Apply Now</span></div>
+        <h2 class="section-title reveal">Reserve Your<br><em>Slot for 2026</em></h2>
+        <p class="contact-info-text reveal">Slots are limited to ensure <strong>exclusivity and personalized support</strong> for every participant. Fill out the form to begin your application — our team will reach out within 48 hours.</p>
+        <div class="contact-detail reveal" style="margin-top:2.5rem;">
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">✦</div>
+            <div><div class="contact-detail-label">Website</div><div class="contact-detail-value">accenttrade.xyz</div></div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">✦</div>
+            <div><div class="contact-detail-label">Location</div><div class="contact-detail-value">Accra, Ghana</div></div>
+          </div>
+          <div class="contact-detail-item">
+            <div class="contact-detail-icon">✦</div>
+            <div><div class="contact-detail-label">Missions</div><div class="contact-detail-value">China · Turkey · Dubai</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal">
+        <div class="form-row">
+          <div class="form-field"><label>First Name</label><input type="text" placeholder="Kwame"></div>
+          <div class="form-field"><label>Last Name</label><input type="text" placeholder="Mensah"></div>
+        </div>
+        <div class="form-field"><label>Email Address</label><input type="email" placeholder="you@example.com"></div>
+        <div class="form-field"><label>Phone (WhatsApp preferred)</label><input type="tel" placeholder="+233 ..."></div>
+        <div class="form-field"><label>Your Industry / Business</label><input type="text" placeholder="e.g. Electronics retail, furniture, textiles..."></div>
+        <div class="form-field">
+          <label>Preferred Destination</label>
+          <select>
+            <option value="">Select a destination...</option>
+            <option>China — Guangzhou (Canton Fair)</option>
+            <option>Turkey — Istanbul</option>
+            <option>Dubai — UAE</option>
+            <option>Open to all three</option>
+          </select>
+        </div>
+        <div class="form-field"><label>Tell us about your goals</label><textarea placeholder="What are you hoping to source, scale, or achieve on this mission?"></textarea></div>
+        <button class="btn-primary" style="align-self:flex-start; cursor:pointer; border:none;" onclick="handleApply()">Submit Application →</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logo">The Ascent <span>Trade Mission</span></div>
+    <div class="footer-copy">© 2026 The Ascent Trade Mission · accenttrade.xyz</div>
+    <div class="footer-links">
+      <a href="#value">About</a>
+      <a href="#destinations">Destinations</a>
+      <a href="#contact">Apply</a>
+    </div>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), 80 * i);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    function handleApply() {
+      alert('Thank you for applying! Our team will reach out within 48 hours. Welcome to The Ascent.');
+    }
+  </script>
+</body>
+</html>
